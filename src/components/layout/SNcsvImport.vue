@@ -72,7 +72,9 @@
   
     methods: {
       onRowSelected(items) {
+        if(items !== undefined){
           this.selected = items;
+        }
       },
 
       selectAllRows() {
@@ -151,11 +153,12 @@
         console.log(this.selected);
         console.log(this.selected.length);
            if(this.selected != null){
-            for(let cont = 0; cont < this.selected.length - 1; cont++){
+            for(let cont = 0; cont < this.selected.length; cont++){
               console.log(this.selected[cont])
               this.createComponent(this.selected[cont].name, this.selected[cont].componentCode, 
               this.selected[cont].componentNCM, this.selected[cont].datetime, this.selected[cont].status);
             }
+            alert("Componente(s) criado(s) com sucesso.")
           } 
       },
 
@@ -168,8 +171,10 @@
 
           this.snGenerate();
           console.log(this.newComponent);
-          this.service = new this.$componentService();
-          this.service.update(this.newComponent);
+          if(this.newComponent.ncm !== undefined ){
+            this.service = new this.$componentService();
+            this.service.update(this.newComponent);
+          }
         
       },
 
