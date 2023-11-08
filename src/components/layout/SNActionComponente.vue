@@ -19,17 +19,19 @@
                 <b-form-group id="serialnumber" 
                     label="Serial Number"
                     label-for="sn_componente">
-                    <b-form-input type="text" id="sn_componente"  v-model="componente.serialNumber"></b-form-input>
+                    <b-form-input type="text" id="sn_componente"  v-model="componente.serialNumber" disabled></b-form-input>
                 </b-form-group>
             </b-col>
         </b-row>
         <b-row>
-            <b-col>
-                <b-form-group id="status" 
-                    label="Status"
-                    label-for="status_componente">
-                    <b-form-input type="text" id="cod_componente" v-model="componente.status"></b-form-input>
-                </b-form-group>
+            <b-col style="display: flex; flex-direction: column;">
+                <label for="input-3"> Status</label>
+                    <b-form-select
+                        id="input-3"
+                        :options="this.statusOptions"
+                        required
+                        v-model="componente.status"
+                    ></b-form-select>
             </b-col>
             <b-col >
                 <b-form-group id="ncm" 
@@ -62,7 +64,8 @@
                     ncm: '',
                     codigo: '',
                     status: ''
-                }
+                    },
+                    statusOptions : ['Estoque', 'Locado', 'Vendido']
             }
         },
         methods: {

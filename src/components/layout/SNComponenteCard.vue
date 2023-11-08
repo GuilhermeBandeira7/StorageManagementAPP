@@ -46,8 +46,14 @@
                                     <b-col class="col-4" style="display: flex; flex-direction: column;">
                                             <b-form-group id="status_input"
                                             label="Status"
-                                            label-for="criar_status">
-                                                <b-form-input type="text" id="criar_status" v-model="componente.status" required></b-form-input>
+                                            label-for="input-3">
+                                                <b-form-select
+                                                    id="input-3"
+                                                    :options="this.statusOptions"
+                                                    required
+                                                    v-model="componente.status"
+                                                    style="width: 100%;"
+                                                ></b-form-select>
                                             </b-form-group>
                                         </b-col>  
                                         <b-col class="col-4" style="display: flex; flex-direction: column;">
@@ -91,7 +97,8 @@ import SNcsvImport from  './SNcsvImport.vue'
                     codigo: '',
                     status: '',            
                 },
-                componenteId: 0 
+                componenteId: 0 ,
+                statusOptions: ['Estoque', 'Locado', 'Vendido']
             }
         },
         methods: {

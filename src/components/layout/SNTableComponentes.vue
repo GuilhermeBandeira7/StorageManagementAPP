@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h3>COMPONENTES</h3>
     <!-- DROPDOWN CRUD COMPONENTES -->
     <component-card @criacao-componente="createComponent"></component-card>
     <b-input v-model="filter" placeholder="Filtrar tabela..."></b-input>
@@ -9,9 +10,9 @@
         <b-button size="sm" @click="info(row.item, row.index, $event.target, 'editar')" class="mr-1" variant="primary" style="margin-right: 1rem;">
           Editar
         </b-button>
-        <b-button size="sm" @click="info(row.item, row.index, $event.target,  'remover')" class="mr-1" variant="danger">
+        <!-- <b-button size="sm" @click="info(row.item, row.index, $event.target,  'remover')" class="mr-1" variant="danger">
           Remover
-        </b-button>
+        </b-button> -->
       </template>
     </b-table>
 

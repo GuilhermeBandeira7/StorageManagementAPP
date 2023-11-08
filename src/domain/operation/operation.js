@@ -1,11 +1,12 @@
 export default class operation{
     constructor(){
         this.id = 0,
-        this.fatura = '',
+        this.observacao = '',
         this.tipo = '',
         this.descricao = '',
-        this.data = '',
+        this.data = new Date().toLocaleString().replace(',', ' '),
         this.notaFiscal = '',
+        this.status = 0,
         this.componentes = []
     }
 }

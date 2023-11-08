@@ -148,22 +148,23 @@
       },
   
       sendSelectRows() {
-        console.log(JSON.stringify(this.selected));
+        console.log(this.selected);
         console.log(this.selected.length);
-          if(this.selected != null){
-            for(let cont = 0; cont < this.selected.length; cont++){
+           if(this.selected != null){
+            for(let cont = 0; cont < this.selected.length - 1; cont++){
               console.log(this.selected[cont])
               this.createComponent(this.selected[cont].name, this.selected[cont].componentCode, 
-              this.selected[cont].componentNCM, this.selected[cont].datetime);
+              this.selected[cont].componentNCM, this.selected[cont].datetime, this.selected[cont].status);
             }
-          }
+          } 
       },
 
-      createComponent(name, code, ncm, date){
+      createComponent(name, code, ncm, date, status){
           this.newComponent.nome = name;
           this.newComponent.codigo = code;
           this.newComponent.ncm = ncm;
           this.newComponent.data = date;
+          this.newComponent.status = status;
 
           this.snGenerate();
           console.log(this.newComponent);

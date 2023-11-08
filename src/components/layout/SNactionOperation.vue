@@ -2,10 +2,10 @@
     <div class="container" style="color: black;">
         <b-row>
             <b-col>
-                <b-form-group id="fatura_op" 
-                        label="fatura"
-                        label-for="fatura_op">
-                        <b-form-input type="text" id="fatura_op" v-model="operacao.fatura"></b-form-input>
+                <b-form-group id="observacao_op" 
+                        label="observacao"
+                        label-for="observacao_op">
+                        <b-form-input type="text" id="observacao_op" v-model="operacao.observacao"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col>
@@ -57,7 +57,7 @@
         data() {
             return {
                     operacao: {
-                    fatura: '',
+                    observacao: '',
                     tipo:  '',
                     descricao: '',
                     data: '',
