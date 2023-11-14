@@ -2,8 +2,8 @@
     <div>
         <h3>OPERAÇÕES</h3>
         <b-card  class="container-fluid" style="margin-bottom: 2rem;">
-            <b-row align-v="center" >
-                <b-col>
+            <b-row>
+                <b-col style="display: flex; justify-content: space-around;">
                     <b-button v-b-toggle.collapse-1>Criar</b-button>
                     <b-button variant="outline-primary" style="margin-left: 5rem;" @click="exportToCsv">Exportar</b-button>
                 </b-col>  
@@ -172,10 +172,17 @@
                     minute: "numeric",
                     second: "numeric"
                 }
-
             }
-        },
+        }, 
         methods : {
+            setUpArray(opStatus){
+                if(opStatus === 1){
+                    this.fieldsComp = ['id','nome', 'ncm', 'serialNumber',  'codigo', 'status', 'Actions']
+                }else{
+                    this.fieldsComp = ['id','nome', 'ncm', 'serialNumber',  'codigo', 'status']
+                }
+            },
+
             populateTable(){
                 this.service = new this.$operationService();
                 this.service
@@ -220,8 +227,9 @@
                 this.service = new this.$operationService();
                 this.service.search(this.selectedRowId).then(result => this.listOfComp =  result.value.componentes);
             },
-            info(item, button, mode) { 
-                console.log('ENTROU');             
+            info(item, button, mode) {  
+                console.log(item.status);
+                this.setUpArray(item.status);         
                 this.infoModal.title = `${item.nome}: ${item.id}`
                 this.infoModal.content = JSON.stringify(item, null, 2)
                 this.selectedRowId = item.id;
