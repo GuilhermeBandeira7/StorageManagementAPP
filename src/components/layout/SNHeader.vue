@@ -39,7 +39,7 @@
 <script>
 import SNUserForm from './SNUserForm.vue';
 
-export default{
+export default {
     components: {
         'user-form': SNUserForm
     },
