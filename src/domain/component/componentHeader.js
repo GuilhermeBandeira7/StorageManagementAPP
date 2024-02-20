@@ -27,6 +27,10 @@ export default class componentHeader {
     {
         key: "operacao",
         label: "Operacao"
-    }
+    },
+    {
+        key: "date",
+        label: "DateTime"
+    },
   ]
 }

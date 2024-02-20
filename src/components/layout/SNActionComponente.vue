@@ -48,7 +48,7 @@
 </template>
 
 <script>
-   export default{
+   export default {
         props:{
             componenteId: {
                 type: Number,

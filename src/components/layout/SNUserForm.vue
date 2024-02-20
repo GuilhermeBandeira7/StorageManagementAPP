@@ -47,7 +47,7 @@
 </template>
 
 <script>
-    export default{
+    export default {
         data(){
             return{
                 user: {

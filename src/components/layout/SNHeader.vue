@@ -57,7 +57,6 @@ export default {
         methods: {
             setSelectedComponent(comp){
                 this.currentComponent = comp;
-                console.log(comp);
                 this.$emit('selectedComponent', this.currentComponent)
             },
 

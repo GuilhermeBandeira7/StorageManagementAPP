@@ -31,7 +31,7 @@
       >
       </b-table>
   
-      <b-button variant="outline-success" size="sm" 
+      <b-button variant="outline-success" size="sm" v-if="isCompSelected"
         class="px-3 d-flex" pill @click="sendSelectRows">Importar Arquivo
       </b-button>
 
@@ -53,7 +53,7 @@
         tableData: [],
         selected: [],
         isAllSelected: false,
-        fields: ['nome', 'ncm', 'serialNumber',  'codigo', 'status'],
+        fields: ['nome', 'ncm', 'serialNumber',  'codigo', 'status', 'datetime'],
         newComponent: {
           nome: '',
           serialNumber:  '',
@@ -67,6 +67,13 @@
     computed: {
       selectedData() {
         return this.selected.map(row => row);
+      },
+
+      isCompSelected(){
+        if(this.selected.length > 0){
+          return true;
+        }
+        return false;
       }
     },
   
@@ -89,9 +96,15 @@
   
       upload() {
         var files = document.getElementById("file_upload").files;
-        if (files.length === 0) {
-          return;
+        try{
+          if (files.length === 0) {
+            throw new Error('No file loaded.');
+          }
         }
+        catch(error){
+          console.log(error)
+        }
+
   
         var filename = files[0].name;
         var extension = filename
@@ -101,11 +114,9 @@
         if (extension === ".CSV") {
           this.csvFileToJSON(files[0]);
         } else {
-          alert("Selecione um arquivo CSV válido");
+          alert("arquivo inválido.");
+          return;
         }
-  
-        alert('Arquivo carregado')
-        console.log("Carregado");
       },
   
       csvFileToJSON(file) {
@@ -118,6 +129,14 @@
             const rows = e.target.result.split("\r\n");
            
             const headers = rows[0].split(separator);
+            console.log('Headers ',headers)
+            for(let cont = 0; cont <= headers.length; cont++){
+              if(headers[0] != 'name' || headers[1] != 'componentCode' || 
+              headers[2] != 'componentNCM' || headers[3] != 'datetime' || headers[4] != 'status'){
+                alert('Cabeçalho do arquivo CSV incorreto! FORMATO CORRETO: name componentCode componentNCM datetime status');
+                throw new Error('incorrect header format.');
+              }
+            }
             const jsonData = [];
   
             for (let i = 1; i < rows.length; i++) {
@@ -134,8 +153,8 @@
   
             this.displayJsonToTable(jsonData);
           };
-        } catch (e) {
-          console.log(e);
+        }catch (error) {
+          console.log(error);
         }
       },
   
@@ -150,16 +169,25 @@
       },
   
       sendSelectRows() {
-        console.log(this.selected);
-        console.log(this.selected.length);
-           if(this.selected != null){
-            for(let cont = 0; cont < this.selected.length; cont++){
-              console.log(this.selected[cont])
-              this.createComponent(this.selected[cont].name, this.selected[cont].componentCode, 
-              this.selected[cont].componentNCM, this.selected[cont].datetime, this.selected[cont].status);
+            console.log(this.selected);
+            try{
+              if(this.selected.length > 0){
+                for(let cont = 0; cont < this.selected.length; cont++){
+                  if(this.selected[cont].serialNumber != '' || this.selected[cont].name != '' || this.selected[cont].ncm != ''
+                  ){
+                    this.createComponent(this.selected[cont].name, this.selected[cont].componentCode, 
+                    this.selected[cont].componentNCM, this.selected[cont].datetime, this.selected[cont].status);
+                  }
+                  else{
+                    console.log('Erro ao criar componente: ', this.selected[cont])
+                  }
+                  
+                }
+                alert("Componente(s) criado(s) com sucesso.");
+              }               
+            }catch(err){
+              console.log(err);
             }
-            alert("Componente(s) criado(s) com sucesso.")
-          } 
       },
 
       createComponent(name, code, ncm, date, status){
@@ -169,8 +197,8 @@
           this.newComponent.data = date;
           this.newComponent.status = status;
 
+
           this.snGenerate();
-          console.log(this.newComponent);
           if(this.newComponent.ncm !== undefined ){
             this.service = new this.$componentService();
             this.service.update(this.newComponent);
@@ -181,7 +209,7 @@
       snGenerate() {
                 var serialNumber = '';
                 var allowedCharts = this.allowCharts();
-                for (var i = 0; i < 8; i++) {
+                for (var i = 1; i < 8; i++) {
                     serialNumber += this.allowCharts()[Math.floor(Math.random() * allowedCharts.length)];
                 }
                 this.newComponent.serialNumber = serialNumber;

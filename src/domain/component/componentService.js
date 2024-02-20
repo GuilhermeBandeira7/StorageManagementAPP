@@ -28,9 +28,9 @@ export default class Service{
             return api.put(`${this.url}/${element.id}`, element);
         } else{
             if(element != null) {
-                console.log(`${this.url}/`, element)
+                //console.log(JSON.stringify(element));
                 return api.post(`${this.url}/`, element).then(res => res.data, err => {
-                    alert("Erro ao adicionar componente.");
+                    //alert("Erro ao adicionar componente.");
                     console.log(err);
                 });
             }

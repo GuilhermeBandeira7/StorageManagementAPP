@@ -23,6 +23,11 @@
           Remover
         </b-button> -->
       </template>
+      <template #cell(info)="row">
+        <b-button size="sm" variant="danger" @click="infoRemove(row.item, $event.target)">
+          Remover
+        </b-button>
+      </template>
     </b-table>
     <b-row class="mb-3">
       <b-col>
@@ -54,7 +59,7 @@
     data() {
       return {
         items: [],
-        fields: ['id', 'selected', 'nome', 'ncm', 'serialNumber',  'codigo', 'status'],
+        fields: ['id', 'selected', 'nome', 'ncm', 'serialNumber',  'codigo', 'data', 'status', 'info'],
         filter: '',
         selected: [],
         selectedComponents: [],
@@ -69,9 +74,18 @@
           serialNumber:  '',
           ncm: '',
           codigo: '',
-          status: ''
+          status: '',
+          dateTime: new Date()
         },
-        allSelected: false
+        allSelected: false,
+        options: {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric"
+        }
       }
     },
     methods : {
@@ -91,14 +105,20 @@
          this.service
          .list()
          .then(result => {
-          console.log(result);
           if(result != null){
             this.items = result;
+            for(let cont = 0; cont < this.items.length; cont++){
+              var messedUpDateTime = this.items[cont].dateTime;
+              var formattedDateTime = new Date(messedUpDateTime);
+              var newDate = formattedDateTime.toLocaleDateString('pt-BR', this.options);
+              this.items[cont].data = newDate;
+            }
           }
+         }).catch(error => {
+          console.log(error);
          })
       },
       createComponent(novoComponente){
-        console.log(JSON.stringify(novoComponente));
         this.service = new this.$componentService();
         this.service.update(novoComponente).then(result => result != null ?
         alert('Componente criado com sucesso.') : alert('Erro ao criar componente.'));
@@ -107,7 +127,6 @@
 
       submitChanges(){
          this.service = new this.$componentService();
-         console.log(this.alteredComp);
          this.service.update(this.alteredComp).then(result =>
          result != null ? alert('componente alterado com sucesso.'): alert('Erro ao tentar alterar componente.'));
       },
@@ -123,7 +142,6 @@
 
       onRowSelected(items){
         this.selectedComponents = items;
-        console.log(this.selectedComponents);
       },
 
       selectAllRows() {
@@ -142,7 +160,7 @@
         const rows = data.map(obj => headers.map(header => obj[header]));
         const headerRow = headers.join(',');
         const csvRows = [headerRow, ...rows.map(row => row.join(','))];
-        return csvRows.join('\n')
+        return csvRows.join('\n');
       },
 
       exportCompsToCsv(){
@@ -153,6 +171,12 @@
         link.href=url;
         link.setAttribute('download', 'export_data.csv');
         link.click();
+      },
+
+      infoRemove(item){
+        console.log(item);
+        this.service = new this.$componentService();
+        this.service.erase(item.id);
       }
     },
 

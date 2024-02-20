@@ -109,7 +109,7 @@
    import SNSelecaoComponentes from './SNSelecaoComponentes.vue';
    import SNactionOperation from './SNactionOperation.vue';
    
-    export default{
+    export default {
         components: {          
             'selecao-componente': SNSelecaoComponentes,
             'action-operation': SNactionOperation
@@ -188,13 +188,10 @@
                 this.service
                 .list()
                 .then(result => {
-                    console.log(result);
                     if(result != null){
                         this.items = result;                      
                         for(let cont = 0; cont < this.items.length; cont++){
-                            console.log(this.items[cont].data, 'data');
                             var messedUpDateTime = this.items[cont].data;
-                            console.log(messedUpDateTime);
                             var formattedDateTime = new Date(messedUpDateTime);
                             var newDate = formattedDateTime.toLocaleDateString('pt-BR', this.options);
                             this.items[cont].data = newDate;
@@ -209,9 +206,6 @@
                 }
                 if(selectedItems != null){
                     this.newOperation.componentes = selectedItems;
-                    console.log(this.newOperation.componentes);
-                }else{
-                    console.log('empty.')
                 }
             },
 
@@ -228,7 +222,6 @@
                 this.service.search(this.selectedRowId).then(result => this.listOfComp =  result.value.componentes);
             },
             info(item, button, mode) {  
-                console.log(item.status);
                 this.setUpArray(item.status);         
                 this.infoModal.title = `${item.nome}: ${item.id}`
                 this.infoModal.content = JSON.stringify(item, null, 2)
@@ -252,7 +245,6 @@
                 this.infoModalRemove.title = `${item.nome}: ${item.id}`
                 this.infoModalRemove.content = JSON.stringify(item, null, 2)            
                 this.selectedOp = item;
-                console.log(this.selectedOp);
                 this.$root.$emit('bv::show::modal', this.infoModalRemove.id, button)
             },
 
@@ -282,7 +274,6 @@
             },
 
             removeComponent(){
-                console.log('ENTROU');
                 this.service = new this.$operationService();
                 this.service.erase(this.selectedRowId)
                 .then(alert('Operação removida com sucesso.'));

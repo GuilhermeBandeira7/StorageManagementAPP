@@ -25,7 +25,6 @@
         },
         methods: {
             displaySelectedTable(comp){
-                console.log(comp)
                 this.currentTable = comp;
             }
         },

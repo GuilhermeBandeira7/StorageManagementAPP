@@ -61,7 +61,7 @@
                                             id="ncm_input"
                                             label="NCM"
                                             label-for="criar_ncm">
-                                                <b-form-input type="text" id="crair_ncm" v-model="componente.ncm" required></b-form-input>
+                                                <b-form-input type="number" id="crair_ncm" v-model="componente.ncm" required></b-form-input>
                                             </b-form-group>
                                         </b-col>                                                                                                  
                                     </b-row>
@@ -83,7 +83,7 @@
 
 <script>
 import SNcsvImport from  './SNcsvImport.vue'
-    export default{
+    export default {
         components: {
             'csv-import' : SNcsvImport
         },
@@ -95,7 +95,8 @@ import SNcsvImport from  './SNcsvImport.vue'
                     serialNumber: '',
                     ncm: '',
                     codigo: '',
-                    status: '',            
+                    status: '',     
+                    dateTime: new Date()       
                 },
                 componenteId: 0 ,
                 statusOptions: ['Estoque', 'Locado', 'Vendido']
@@ -110,7 +111,7 @@ import SNcsvImport from  './SNcsvImport.vue'
                 var serialNumber = '';
                 var allowedCharts = this.allowCharts();
                 console.log(allowedCharts)
-                for (var i = 0; i < 8; i++) {
+                for (var i = 1; i < 8; i++) {
                     serialNumber += this.allowCharts()[Math.floor(Math.random() * allowedCharts.length)];
                 }
 

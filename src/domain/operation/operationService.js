@@ -12,16 +12,12 @@ export default class Service{
     }
 
     list(){
-        console.log(this.url)
         return api.get(this.url).then(res => res.data, err => {
             console.log(err)
         })
     }
 
     update(element) {
-        console.log(element);
-        console.log(this.url);
-        console.log(JSON.stringify(element));
         if(element.id) {
             return api.put(`${this.url}/${element.id}`, element);
         } else {
@@ -33,7 +29,6 @@ export default class Service{
     }
 
     erase(element) {
-
         return api
             .delete(`${this.url}/${element.id}`)
             .then(null, err => {
@@ -44,19 +39,19 @@ export default class Service{
     }
 
     removeComponentOfTheOperation(op, compId){
-        console.log(`${this.url}/RemoveComponentOp/${op}/${compId}`);
+        //console.log(`${this.url}/RemoveComponentOp/${op}/${compId}`);
         return api.delete(`${this.url}/RemoveComponentOp/${op}/${compId}`)
         .then(result => console.log(result));
     }
 
     addComponentsToTheOperation(op, compList){
-        console.log(`${this.url}/AddComponentOp/${op}`, compList);
+        //console.log(`${this.url}/AddComponentOp/${op}`, compList);
         return api.post(`${this.url}/AddComponentOp/${op}`, compList)
         .then(alert('Componentes adicionados na operação com sucesso.'));
     }
 
     closeOperation(id){
-        console.log(`${this.url}/AlterStats/${id}`);
+        //console.log(`${this.url}/AlterStats/${id}`);
         return api.put(`${this.url}/AlterStats/${id}`).then(alert("Operação fechada."))
     }
 }
