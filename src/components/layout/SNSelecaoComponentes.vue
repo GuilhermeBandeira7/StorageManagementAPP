@@ -1,19 +1,5 @@
 <template>
     <div>
-            <b-form-group
-            label="Selection mode:"
-            label-for="table-select-mode-select"
-            label-cols-md="4"
-            style="display: flex; flex-direction: row;" >
-                <b-form-select
-                    id="table-select-mode-select"
-                    v-model="selectMode"
-                    :options="modes"
-                    class="mb-3"
-                    style="width: 150px;"
-                ></b-form-select>
-            </b-form-group>
-
             <b-pagination
                 v-model="currentPage"
                 :total-rows="rows"
@@ -47,14 +33,25 @@
         </b-table>
         <div style="display: flex; justify-content: space-around;">
             <b-button size="sm" @click="selectAllRows">Selecionar Tudo</b-button>
-            <b-button size="sm" @click="clearSelected()">Limpar Seleção</b-button>
+            <b-button v-if="this.selected.length > 0" size="sm" @click="clearSelected()">Limpar Seleção</b-button>
             <b-button size="sm" variant="primary" @click="addSelectedToTheOperation()">Salvar</b-button>
-            <b-button size="sm" variant="danger" @click="closeOperation()">Fechar Operação</b-button>
+            <b-button size="sm" variant="danger" @click="infoCloseOperation($event.target)">Fechar Operação</b-button>
         </div>
         <div class="container-fluid" style="display: flex; flex-direction: column;">
-            <p style="align-self: center; margin-top: 2rem;">COMPONENTES SELECIONADOS</p>
             <b-table :items="selected" :fiels="fields"></b-table>
-        </div>       
+        </div>     
+        
+        <b-modal :id="infoModalCloseOp.id" ref="info-modalCLoseOp" size="md" class="container" hide-footer>
+            <b-row>
+                <p>Tem certeza que deseja fechar a operação?</p>
+            </b-row>
+            <b-row style="display: flex;  flex-direction: row;">
+                <b-col style="display: flex; ">                
+                    <b-button @click="closeOperation()" style="margin-right: 1rem;">Sim</b-button>
+                    <b-button @click="this.hideModal">Não</b-button>
+                </b-col>
+            </b-row>
+        </b-modal>
     </div>
 </template>
 
@@ -75,7 +72,10 @@
                 selectMode: 'multi',
                 selected: [],
                 perPage: 10,
-                currentPage: 1
+                currentPage: 1,
+                infoModalCloseOp: {
+                    id: 'info-modalCLoseOp'
+                }
             }
         }, 
         computed: 
@@ -87,38 +87,9 @@
 
         methods: {
             onRowSelected(elements) {
-                console.log(elements, ' elements')
-                elements.forEach(element => {
-                    console.log(element);
-                    if(this.DidNotFindElementWithSameId(element)){
-                        this.selected.push(element);
-                        console.log(this.selected);
-                    }
-
-                    console.log(this.selected ,"selecioandos");     
-                    console.log(element);
-                });
+                console.log(elements);
+                this.selected = elements;
             },
-            onRowUnselected(value){
-                console.log('entrou.');
-                this.selected.forEach(element => {
-                    if(element.id === value.id){
-                        element.selected = false;
-                        this.selected.filter((element => {
-                            return element.id != value.id;
-                        }))
-                    }
-                })
-            },
-
-            DidNotFindElementWithSameId(value){
-                var result =  this.selected.filter((element => { return element.id == value.id} ))
-                if(result.length > 0){ //encontrou um elemento com o mesmo id daquele que queremos adicionar
-                return false;
-                }else{ //senão encontrou um elemento com o mesmo id retorna true
-                    return true;
-                }
-            }, 
             selectAllRows() {
                 this.$refs.selectableTable.selectAllRows();
 
@@ -134,21 +105,28 @@
                 this.service
                 .listComponentsWithoutOperation()
                 .then(result => {
-                    console.log(result);
                     if(result != null){
                         this.items = result;
                     }
                 })
             },
             addSelectedToTheOperation(){
-                console.log(this.selected);
-                console.log(this.operationId, 'id da operação')
                 this.service = new this.$operationService();
                 this.service.addComponentsToTheOperation(this.operationId, this.selected);
             },
+            infoCloseOperation(button){
+                this.$root.$emit('bv::show::modal', this.infoModalCloseOp.id, button)                
+            },
+
             closeOperation(){
                 this.service = new this.$operationService();
                 this.service.closeOperation(this.operationId);
+
+                this.hideModal();
+            },
+
+            hideModal() {
+                this.$refs['info-modalCLoseOp'].hide();
             }
         },
 

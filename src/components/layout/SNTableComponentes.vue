@@ -16,16 +16,10 @@
           <span aria-hidden="true">&nbsp;</span>
           <span class="sr-only">Not selected</span>
         </template>
-        <!-- <b-button size="sm" @click="info(row.item, row.index, $event.target, 'editar')" class="mr-1" variant="primary" style="margin-right: 1rem;">
-          Editar
-        </b-button> -->
-        <!-- <b-button size="sm" @click="info(row.item, row.index, $event.target,  'remover')" class="mr-1" variant="danger">
-          Remover
-        </b-button> -->
       </template>
       <template #cell(info)="row">
         <b-button size="sm" variant="danger" @click="infoRemove(row.item, $event.target)">
-          Remover
+          <b-icon icon="trash" aria-hidden="true"></b-icon>
         </b-button>
       </template>
     </b-table>
@@ -41,9 +35,21 @@
         </b-button>
       </b-col>
     </b-row>
-
+    <!-- MODAL -->
     <b-modal :id="infoModal.id" :title="infoModal.title" hide-footer>
       <action-componente :componenteId="selectedRowCompId" @componente-alterado="setAlteredComponent"></action-componente>
+    </b-modal>
+    <!-- MODAL REMOVER COMPONENTE -->
+    <b-modal :id="infoModalRemove.id" ref="remove-modal" size="md" class="container" hide-footer>
+            <b-row>
+                <p>Tem certeza que deseja remover o componente?</p>
+            </b-row>
+            <b-row style="display: flex;  flex-direction: row;">
+                <b-col style="display: flex; ">                
+                    <b-button @click="removeComponent()" style="margin-right: 1rem;">Sim</b-button>
+                    <b-button @click="this.hideModal">Não</b-button>
+                </b-col>
+            </b-row>
     </b-modal>
   </div>
 </template>
@@ -85,7 +91,13 @@
           hour: "numeric",
           minute: "numeric",
           second: "numeric"
-        }
+        },
+        infoModalRemove: {
+          id: 'info-modal3',
+          title: '',
+          content: ''
+        },
+        selectedComp: ''
       }
     },
     methods : {
@@ -173,10 +185,25 @@
         link.click();
       },
 
-      infoRemove(item){
-        console.log(item);
+      infoRemove(item, button){
+        this.infoModalRemove.title = `${item.nome}: ${item.id}`
+        this.infoModalRemove.content = JSON.stringify(item, item.id, 2)            
+        this.selectedComp = item;
+        console.log(this.selectedComp);
+        this.$root.$emit('bv::show::modal', this.infoModalRemove.id, button)
+      },
+
+      removeComponent(){
         this.service = new this.$componentService();
-        this.service.erase(item.id);
+         this.service.erase(this.selectedComp.id).then(result => alert('Componente removido ', result), err => {
+          console.log(err);
+         });
+
+         this.hideModal();
+      },
+
+      hideModal() {
+        this.$refs['remove-modal'].hide()
       }
     },
 

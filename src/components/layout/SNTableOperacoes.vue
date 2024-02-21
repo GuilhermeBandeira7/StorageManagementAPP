@@ -41,33 +41,40 @@
             </b-row>            
         </b-card>
 
+        <!-- FILTRO DA TABELA -->
         <b-input v-model="filter" placeholder="Filtrar tabela..."></b-input>
+        <!-- TABELA OPERAÇÕES -->
         <b-table sticky-header striped hover :items="items" :fields="fields" :filter="filter" responsive="sm" head-variant="light" style="height: 100%; max-height: none;">
+            <!-- PILL BUTTON -->
             <template #cell(status)="data">
-                <b-button v-if="data.value == 1" pill variant="success"
-                    style="margin-right: 1rem;" @click="infoPill(data.item)">
-                    Aberto</b-button>
-                <b-button v-else pill variant="danger"
-                style="margin-right: 1rem;">
-                Fechado</b-button>
+                <b-button v-if="data.value == 1" @click="infoPill(data.item)" pill title="aberto">
+                    <b-icon icon="unlock" aria-hidden="true"></b-icon>
+                </b-button>
+                <b-button v-else pill title="fechado">
+                    <b-icon icon="lock" aria-hidden="true"></b-icon>
+                </b-button>
             </template>
-
+            <!-- COLUNA DETALHES -->
             <template #cell(Detalhes)="row">
-                <b-button size="sm" v-b-modal.modal-1 class="mr-2" @click="info(row.item, $event.target)" style="margin-right: 0.5rem;">
-                    {{ row.detailsShowing ? 'Componentes' : 'Componentes'}} 
-                </b-button>
-                <b-button size="sm" @click="infoEdit(row.item, $event.target)" variant="primary" style="margin-right: 0.5rem;">
-                    Editar
-                </b-button>
-                <b-button size="sm" variant="danger" @click="infoRemove(row.item, $event.target)">
-                    Remover
-                </b-button>
+
+                <!-- Button group -->
+                <div>
+                    <b-button-toolbar>
+                        <b-button-group>
+                            <b-button title="Componentes" v-b-modal.modal-1 @click="info(row.item, $event.target)">
+                                <b-icon icon="collection" aria-hidden="true"></b-icon>
+                            </b-button>
+                            <b-button title="Editar" @click="infoEdit(row.item, $event.target)">
+                                <b-icon icon="vector-pen" aria-hidden="true"></b-icon>
+                            </b-button>
+                            <b-button title="Remover" @click="infoRemove(row.item, $event.target)">
+                                <b-icon icon="trash" aria-hidden="true"></b-icon>
+                            </b-button>
+                        </b-button-group>
+                    </b-button-toolbar>
+                </div>
             </template>   
         </b-table>
-        
-        <!-- <b-col class="col-4" style="display: flex; flex-direction: column; justify-content: flex-end;">
-                <b-button v-b-modal.modal-tall size="sm" >Selecionar Componentes</b-button>                                   
-        </b-col>  -->
 
         <!-- MODAL -->
         <b-modal :id="infoModalPill.id"
