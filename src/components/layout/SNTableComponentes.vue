@@ -65,7 +65,7 @@
     data() {
       return {
         items: [],
-        fields: ['id', 'selected', 'nome', 'ncm', 'serialNumber',  'codigo', 'data', 'status', 'info'],
+        fields: ['id', 'selected', 'nome', 'ncm', 'serialNumber',  'codigo', 'dateTime', 'status', 'info'],
         filter: '',
         selected: [],
         selectedComponents: [],
@@ -123,7 +123,7 @@
               var messedUpDateTime = this.items[cont].dateTime;
               var formattedDateTime = new Date(messedUpDateTime);
               var newDate = formattedDateTime.toLocaleDateString('pt-BR', this.options);
-              this.items[cont].data = newDate;
+              this.items[cont].dateTime = newDate;
             }
           }
          }).catch(error => {

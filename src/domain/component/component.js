@@ -7,6 +7,6 @@ export default class component{
         this.codigo = '',
         this.status = '',
         this.operacao = '',
-        this.datetime = ''
+        this.dateTime = ''
     }
 }

@@ -29,7 +29,7 @@ export default class componentHeader {
         label: "Operacao"
     },
     {
-        key: "date",
+        key: "datetime",
         label: "DateTime"
     },
   ]
