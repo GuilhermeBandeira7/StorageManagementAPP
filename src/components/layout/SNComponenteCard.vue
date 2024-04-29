@@ -96,7 +96,7 @@ import SNcsvImport from  './SNcsvImport.vue'
                     ncm: '',
                     codigo: '',
                     status: '',     
-                    dateTime: new Date()       
+                    dateTime: new Date()  
                 },
                 componenteId: 0 ,
                 statusOptions: ['Estoque', 'Locado', 'Vendido']
@@ -110,7 +110,6 @@ import SNcsvImport from  './SNcsvImport.vue'
               snGenerate() {
                 var serialNumber = '';
                 var allowedCharts = this.allowCharts();
-                console.log(allowedCharts)
                 for (var i = 1; i < 8; i++) {
                     serialNumber += this.allowCharts()[Math.floor(Math.random() * allowedCharts.length)];
                 }

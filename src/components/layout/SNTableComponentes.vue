@@ -131,6 +131,7 @@
          })
       },
       createComponent(novoComponente){
+        console.log(this.novoComponente);
         this.service = new this.$componentService();
         this.service.update(novoComponente).then(result => result != null ?
         alert('Componente criado com sucesso.') : alert('Erro ao criar componente.'));
